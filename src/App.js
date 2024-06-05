@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SearchIcon from "./search.svg";
 import "./App.css";
+import MovieCard from "./MovieCard";
 const API_URL = `http://www.omdbapi.com/?apikey=147c2355`;
 const movie1 = {
   "Title": "Superman, Spiderman or Batman",
@@ -20,7 +21,6 @@ const App = () => {
   const searchMovies = async (title) => {
     const response = await fetch(`${API_URL}&s=${title}`);
     const data = await response.json();
-    console.log(data.Search);
     setMovies(data.Search)
   }
 
@@ -35,27 +35,25 @@ const App = () => {
 
         <img src={SearchIcon} alt="Search" />
       </div>
+      {
+        movies?.length > 0 ? (
+          <div className="container">
 
-      <div className="container">
-        <div className="movie">
-          <div>
-            <p>{movie1.Year}</p>
+            {movies.map((movie)=>{
+              <MovieCard key={movie.imdbID} movie={movie} />
+            })}
+
           </div>
-
-          <div>
-            <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https:via.placeholder.com/400'} alt="{movie.Title}" />
+        ) : (
+          <div className="empty">
+            <h2>No Movies Found</h2>
           </div>
+        )
 
-          <div>
-            <span>{movie1.Type}</span>
-            <h3>{movie1.Title}</h3>
-          </div>
-        </div>
+      }
 
-
-      </div>
     </div>
-  );
+  )
 }
 
 export default App;
